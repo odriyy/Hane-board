@@ -228,7 +228,7 @@
       } = useTaskBoardLogic();
 
       return (
-        <div className="min-h-screen w-full bg-[#f3f3f3] p-6">
+        <div className="w-full bg-[#f3f3f3] p-6">
           <div className="mx-auto flex h-[600px] w-[1024px] overflow-hidden rounded-3xl border border-[#e1ded8] bg-[#f5f5f5] shadow-md">
             <div className="flex w-[720px] flex-col items-center px-10 pt-12">
               <h1 className="mb-5 text-[28px] font-extrabold text-black">Order: {orderNumber}</h1>
@@ -252,7 +252,11 @@
               />
             </div>
 
+          </div>
         </div>
+      );
+
+    }
 
     // Render the app
     const root = ReactDOM.createRoot(document.getElementById('root'));
