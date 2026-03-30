@@ -1,140 +1,77 @@
-/* Reset */
+/* Base reset to ensure consistent sizing */
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
-  background-color: #f3f3f3;
+/* Main Container - Strictly sized to 600x1024 */
+.ui-container {
+    width: 600px;
+    height: 1024px;
+    background-color: #ffffff;
+    border: 2px solid #cbb2f4;
+    margin: 0 auto;
+    padding: 80px 60px;
+    font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
 }
 
-/* Main app area */
-.app-shell {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  background-color: #f3f3f3;
+/* Header Styling */
+.header-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 900;
+    color: #000000;
+    letter-spacing: 0.5px;
+    margin-bottom: 35px;
 }
 
-.board {
-  width: 381px;
-  min-height: 634px;
-  padding: 52px 32px 40px;
-  background-color: #f3f3f3;
-}
-
-/* Title */
-.order-title {
-  margin: 0 0 14px;
-  text-align: center;
-  font-size: 16px;
-  font-weight: 800;
-  color: #000;
-}
-
-/* Top tray */
-.top-tray {
-  width: 313px;
-  height: 72px;
-  margin: 0 auto;
-  display: flex;
-  align-items: stretch;
-}
-
-.tray-side {
-  width: 52px;
-  height: 72px;
-  display: flex;
-  flex-direction: column;
-  background-color: #d8c7aa;
-  border: 1px solid #d79d63;
-}
-
-.tray-side-top,
-.tray-side-bottom {
-  flex: 1;
-}
-
-.tray-side-top {
-  border-bottom: 1px solid #d79d63;
-}
-
-.tray-center {
-  width: 209px;
-  height: 72px;
-  background-color: #e6dfd4;
-  border-top: 1px solid #e0d7ca;
-  border-bottom: 1px solid #e0d7ca;
-}
-
-/* Task grid */
-.task-grid {
-  width: 100%;
-  margin-top: 44px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  column-gap: 28px;
-  row-gap: 44px;
-  justify-items: center;
-}
-
-/* Task cards */
-.task-card {
-  width: 136px;
-  height: 136px;
-  border: 1px solid #ebe6dc;
-  background-color: #e8e2d8;
-  padding: 0;
-  cursor: pointer;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
-}
-
-.task-card:hover {
-  transform: scale(1.01);
-}
-
-.task-card.selected {
-  border: 2px solid #9d5cff;
-}
-
-.task-card.done {
-  opacity: 0.6;
-}
-
-/* Optional text inside box if you later add labels */
-.task-card span {
-  display: inline-block;
-  color: #7f776d;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* Responsive */
-@media (max-width: 420px) {
-  .board {
+/* Top Banner Section */
+.top-banner {
+    display: flex;
     width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+    height: 155px;
+    margin-bottom: 65px;
+}
 
-  .top-tray {
+/* Side columns holding the small tan squares */
+.side-column {
+    display: flex;
+    flex-direction: column;
+    width: 75px; 
+    height: 100%;
+}
+
+/* Individual tan squares */
+.small-square {
     width: 100%;
-    max-width: 313px;
-  }
+    height: 50%;
+    background-color: #dfcdb3;
+    border: 1.5px solid #d5a374; 
+}
 
-  .tray-center {
-    flex: 1;
-    width: auto;
-  }
+/* Prevents double borders where vertical squares touch */
+.small-square:first-child {
+    border-bottom: none; 
+}
 
-  .task-grid {
-    column-gap: 20px;
-  }
+/* Large off-white rectangle in the middle */
+.center-rectangle {
+    flex-grow: 1; 
+    background-color: #f3efe6;
+}
 
-  .task-card {
-    width: 128px;
-    height: 128px;
-  }
+/* 2x2 Grid Section */
+.grid-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    width: 100%;
+}
+
+/* Large off-white squares */
+.large-square {
+    background-color: #f3efe6;
+    width: 100%;
+    aspect-ratio: 1 / 1; 
 }
