@@ -3,17 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Board</title>
+  <title>Task Board - Home</title>
+  <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-  </style>
 </head>
 <body>
-  <div id="root"></div>
+  <nav>
+    <div class="container">
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="page1.html">Features</a></li>
+        <li><a href="page2.html">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="page-content">
+    <div class="container">
+      <h1 class="page-title">Welcome to Task Board</h1>
+      <p class="page-description">
+        Manage your coffee orders efficiently with our interactive task board system.
+        Track orders, mark tasks as complete, and streamline your workflow.
+      </p>
+
+      <div id="root"></div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>🚀 Quick Start</h3>
+          <p>Get started with your task board in seconds. Click on any task card to select it, then use the control panel to manage orders.</p>
+          <a href="#root" class="btn">Try It Now</a>
+        </div>
+
+        <div class="card">
+          <h3>📊 Features</h3>
+          <p>Learn about all the powerful features available in our task management system.</p>
+          <a href="page1.html" class="btn btn-secondary">View Features</a>
+        </div>
+
+        <div class="card">
+          <h3>ℹ️ About</h3>
+          <p>Discover more about our project and how it can help streamline your workflow.</p>
+          <a href="page2.html" class="btn btn-secondary">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Task Board. Built with React and love.</p>
+    </div>
+  </footer>
 
   <script type="text/babel">
     // Inline the logic from UI Logic
