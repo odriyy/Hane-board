@@ -1,164 +1,140 @@
-/* Task Board Styles */
+/* Reset */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
   background-color: #f3f3f3;
 }
 
-/* Navigation Styles */
-nav {
-  background-color: #2f241b;
-  padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-nav .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* Main app area */
+.app-shell {
+  min-height: 100vh;
   display: flex;
-  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #f3f3f3;
 }
 
-nav a {
-  color: #e5dfd3;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
+.board {
+  width: 381px;
+  min-height: 634px;
+  padding: 52px 32px 40px;
+  background-color: #f3f3f3;
 }
 
-nav a:hover {
-  background-color: #d49a5f;
-  color: #2f241b;
+/* Title */
+.order-title {
+  margin: 0 0 14px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: #000;
 }
 
-nav a.active {
-  background-color: #d2b48c;
-  color: #2f241b;
-}
-
-/* Page Content Styles */
-.page-content {
-  min-height: calc(100vh - 80px);
-  padding: 2rem;
-}
-
-.container {
-  max-width: 1200px;
+/* Top tray */
+.top-tray {
+  width: 313px;
+  height: 72px;
   margin: 0 auto;
+  display: flex;
+  align-items: stretch;
 }
 
-.page-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #241c16;
-  margin-bottom: 2rem;
-  text-align: center;
+.tray-side {
+  width: 52px;
+  height: 72px;
+  display: flex;
+  flex-direction: column;
+  background-color: #d8c7aa;
+  border: 1px solid #d79d63;
 }
 
-.page-description {
-  font-size: 1.2rem;
-  color: #6f6256;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-  text-align: center;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+.tray-side-top,
+.tray-side-bottom {
+  flex: 1;
 }
 
-/* Card Styles */
-.card {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
+.tray-side-top {
+  border-bottom: 1px solid #d79d63;
 }
 
-.card h3 {
-  color: #241c16;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+.tray-center {
+  width: 209px;
+  height: 72px;
+  background-color: #e6dfd4;
+  border-top: 1px solid #e0d7ca;
+  border-bottom: 1px solid #e0d7ca;
 }
 
-.card p {
-  color: #6f6256;
-  line-height: 1.6;
-}
-
-/* Button Styles */
-.btn {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  background-color: #d2b48c;
-  color: #2f241b;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background-color: #c58f55;
-}
-
-.btn-secondary {
-  background-color: #e5dfd3;
-  color: #3d332b;
-}
-
-.btn-secondary:hover {
-  background-color: #d7d0c4;
-}
-
-/* Grid Layout */
-.grid {
+/* Task grid */
+.task-grid {
+  width: 100%;
+  margin-top: 44px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 28px;
+  row-gap: 44px;
+  justify-items: center;
 }
 
-/* Footer */
-footer {
-  background-color: #2f241b;
-  color: #e5dfd3;
-  text-align: center;
-  padding: 2rem;
-  margin-top: 4rem;
+/* Task cards */
+.task-card {
+  width: 136px;
+  height: 136px;
+  border: 1px solid #ebe6dc;
+  background-color: #e8e2d8;
+  padding: 0;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-footer p {
-  margin: 0;
-  font-size: 0.9rem;
+.task-card:hover {
+  transform: scale(1.01);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  nav .container {
-    padding: 0 1rem;
+.task-card.selected {
+  border: 2px solid #9d5cff;
+}
+
+.task-card.done {
+  opacity: 0.6;
+}
+
+/* Optional text inside box if you later add labels */
+.task-card span {
+  display: inline-block;
+  color: #7f776d;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 420px) {
+  .board {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
-  nav ul {
-    gap: 1rem;
+  .top-tray {
+    width: 100%;
+    max-width: 313px;
   }
 
-  .page-content {
-    padding: 1rem;
+  .tray-center {
+    flex: 1;
+    width: auto;
   }
 
-  .page-title {
-    font-size: 2rem;
+  .task-grid {
+    column-gap: 20px;
+  }
+
+  .task-card {
+    width: 128px;
+    height: 128px;
   }
 }
