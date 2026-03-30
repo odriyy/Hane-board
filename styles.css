@@ -5,14 +5,48 @@
     padding: 0;
 }
 
-/* Main Container - Strictly sized to 600x1024 */
+body {
+    min-height: 100vh;
+    background: #edf2ff;
+    color: #2a2a2a;
+    font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.app-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+}
+
+.launch-panel {
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.action-link {
+    display: inline-block;
+    background: #333;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+/* Main Container */
 .ui-container {
-    width: 600px;
-    height: 1024px;
+    width: min(600px, 100%);
+    min-height: 860px;
     background-color: #ffffff;
     border: 2px solid #cbb2f4;
     margin: 0 auto;
-    padding: 80px 60px;
+    padding: 60px 35px;
+    box-shadow: 0 12px 25px rgba(0,0,0,.1);
+    border-radius: 18px;
     font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
 }
 
@@ -57,8 +91,10 @@
 
 /* Large off-white rectangle in the middle */
 .center-rectangle {
-    flex-grow: 1; 
+    flex-grow: 1;
     background-color: #f3efe6;
+    border: 1px solid #e6d9b7;
+    border-radius: 8px;
 }
 
 /* 2x2 Grid Section */
@@ -71,7 +107,20 @@
 
 /* Large off-white squares */
 .large-square {
+    position: relative;
     background-color: #f3efe6;
     width: 100%;
-    aspect-ratio: 1 / 1; 
+    aspect-ratio: 1 / 1;
+    border-radius: 15px;
+    border: 1px solid #e5d8b9;
+}
+
+.grid-label {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    font-weight: 900;
+    color: #2a2a2a;
 }
