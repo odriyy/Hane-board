@@ -7,7 +7,7 @@
 
 body {
     min-height: 100vh;
-    background: #edf2ff;
+    background: #ffffff;
     color: #2a2a2a;
     font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
 }
@@ -42,7 +42,7 @@ body {
     width: min(600px, 100%);
     min-height: 860px;
     background-color: #ffffff;
-    border: 2px solid #cbb2f4;
+    border: 2px solid #dddddd;
     margin: 0 auto;
     padding: 60px 35px;
     box-shadow: 0 12px 25px rgba(0,0,0,.1);
@@ -64,7 +64,7 @@ body {
 .top-banner {
     display: flex;
     width: 100%;
-    height: 155px;
+    height: 240px;
     margin-bottom: 65px;
 }
 
@@ -72,8 +72,9 @@ body {
 .side-column {
     display: flex;
     flex-direction: column;
-    width: 75px; 
+    width: 95px; 
     height: 100%;
+    gap: 0;
 }
 
 /* Individual tan squares */
@@ -81,28 +82,50 @@ body {
     width: 100%;
     height: 50%;
     background-color: #dfcdb3;
-    border: 1.5px solid #d5a374; 
+    border: 1.5px solid #d5a374;
+    border-radius: 0;
 }
 
-/* Prevents double borders where vertical squares touch */
-.small-square:first-child {
-    border-bottom: none; 
+/* remove double middle border */
+.side-column .small-square:first-child {
+    border-bottom: none;
+}
+
+/* LEFT COLUMN */
+.top-banner .side-column:first-child .small-square:first-child {
+    border-radius: 8px 0 0 0;   /* top-left only */
+}
+
+.top-banner .side-column:first-child .small-square:last-child {
+    border-radius: 0 0 0 8px;   /* bottom-left only */
+}
+
+/* RIGHT COLUMN */
+.top-banner .side-column:last-child .small-square:first-child {
+    border-radius: 0 8px 0 0;   /* top-right only */
+}
+
+.top-banner .side-column:last-child .small-square:last-child {
+    border-radius: 0 0 8px 0;   /* bottom-right only */
 }
 
 /* Large off-white rectangle in the middle */
 .center-rectangle {
     flex-grow: 1;
+    height: 100%;
     background-color: #f3efe6;
     border: 1px solid #e6d9b7;
-    border-radius: 8px;
+    object-fit: cover;
+    /*border-radius: 8px;*/
 }
 
 /* 2x2 Grid Section */
 .grid-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 25px;
+    gap: 15px;
     width: 100%;
+    justify-items: center;
 }
 
 /* Large off-white squares */
