@@ -138,6 +138,15 @@ body {
     border: 1px solid #e5d8b9;
 }
 
+.square-number {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #6b5b4b; /* match your UI theme */
+}
+
 .grid-label {
     position: absolute;
     inset: 0;
@@ -147,4 +156,19 @@ body {
     font-weight: 900;
     color: #2a2a2a;
     visibility: visible;
+}
+/* Fix for the main mug image */
+.center-rectangle img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* This ensures the whole icon fits without being cropped */
+  
+}
+
+/* Fix for the step images in the grid */
+.large-square img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
