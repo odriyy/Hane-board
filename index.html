@@ -1,40 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order UI Rebuild</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hane Board</title>
 </head>
 <body>
-    <div class="app-wrapper">
-        <div class="ui-container" id="order-board">
-            
-            <h1 class="header-title">Order: 1</h1>
+  <h1>Waiting for task...</h1>
 
-        <div class="top-banner">
-            <div class="side-column">
-                <div class="small-square"></div>
-                <div class="small-square"></div>
-            </div>
-            
-            <div class="center-rectangle"></div>
-            
-            <div class="side-column">
-                <div class="small-square"></div>
-                <div class="small-square"></div>
-            </div>
-        </div>
+  <script>
+    const espIP = "10.72.225.90";
 
-        <div class="grid-section">
-           <div class="large-square"> <span class="square-number">1</span></div>
-            <div class="large-square"> <span class="square-number">2</span></div>
-            <div class="large-square"> <span class="square-number">3</span></div>
-            <div class="large-square"> <span class="square-number">4</span></div>
-        </div>
-    
-        </div> <!-- .ui-container -->
-    </div> <!-- .app-wrapper -->
+    async function checkESP() {
+      try {
+        const res = await fetch(`http://${espIP}/page`);
+        const page = (await res.text()).trim();
 
+        if (page) {
+          window.location.href = page;
+        }
+      } catch (e) {
+        console.log("ESP32 not reachable");
+      }
+    }
+
+    setInterval(checkESP, 1000);
+  </script>
 </body>
 </html>

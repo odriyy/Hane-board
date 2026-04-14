@@ -1,174 +1,20 @@
-/* Base reset to ensure consistent sizing */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
+html,
 body {
-    min-height: 100vh;
-    background: #ffffff;
-    color: #2a2a2a;
-    font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #ddd5c3;
 }
 
-.app-wrapper {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 24px;
+.page {
+  width: 100vw;
+  height: 100vh;
 }
 
-.launch-panel {
-    width: 100%;
-    max-width: 700px;
-    margin-bottom: 12px;
-    text-align: center;
-}
-
-.action-link {
-    display: inline-block;
-    background: #333;
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-/* Main Container */
-.ui-container {
-    width: min(600px, 100%);
-    min-height: 860px;
-    background-color: #ffffff;
-    border: 2px solid #dddddd;
-    margin: 0 auto;
-    padding: 60px 35px;
-    box-shadow: 0 12px 25px rgba(0,0,0,.1);
-    border-radius: 18px;
-    font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
-}
-
-/* Header Styling */
-.header-title {
-    text-align: center;
-    font-size: 20px;
-    font-weight: 900;
-    color: #000000;
-    letter-spacing: 0.5px;
-    margin-bottom: 35px;
-}
-
-/* Top Banner Section */
-.top-banner {
-    display: flex;
-    width: 100%;
-    height: 240px;
-    margin-bottom: 65px;
-}
-
-/* Side columns holding the small tan squares */
-.side-column {
-    display: flex;
-    flex-direction: column;
-    width: 95px; 
-    height: 100%;
-    gap: 0;
-}
-
-/* Individual tan squares */
-.small-square {
-    width: 100%;
-    height: 50%;
-    background-color: #dfcdb3;
-    border: 1.5px solid #d5a374;
-    border-radius: 0;
-}
-
-/* remove double middle border */
-.side-column .small-square:first-child {
-    border-bottom: none;
-}
-
-/* LEFT COLUMN */
-.top-banner .side-column:first-child .small-square:first-child {
-    border-radius: 8px 0 0 0;   /* top-left only */
-}
-
-.top-banner .side-column:first-child .small-square:last-child {
-    border-radius: 0 0 0 8px;   /* bottom-left only */
-}
-
-/* RIGHT COLUMN */
-.top-banner .side-column:last-child .small-square:first-child {
-    border-radius: 0 8px 0 0;   /* top-right only */
-}
-
-.top-banner .side-column:last-child .small-square:last-child {
-    border-radius: 0 0 8px 0;   /* bottom-right only */
-}
-
-/* Large off-white rectangle in the middle */
-.center-rectangle {
-    flex-grow: 1;
-    height: 100%;
-    background-color: #f3efe6;
-    border: 1px solid #e6d9b7;
-    object-fit: cover;
-    /*border-radius: 8px;*/
-}
-
-/* 2x2 Grid Section */
-.grid-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    width: 100%;
-    justify-items: center;
-}
-
-/* Large off-white squares */
-.large-square {
-    position: relative;
-    background-color: #f3efe6;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 15px;
-    border: 1px solid #e5d8b9;
-}
-
-.square-number {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #6b5b4b; /* match your UI theme */
-}
-
-.grid-label {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    font-size: 20px;
-    font-weight: 900;
-    color: #2a2a2a;
-    visibility: visible;
-}
-/* Fix for the main mug image */
-.center-rectangle img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* This ensures the whole icon fits without being cropped */
-  
-}
-
-/* Fix for the step images in the grid */
-.large-square img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
+.poster-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
