@@ -8,8 +8,19 @@ const char* password = "12345678";
 
 WebServer server(80);
 
-// Change this later based on LDR / puzzle logic
 String currentPage = "black_americano.html";
+
+const char* pages[] = {
+  "black_americano.html",
+  "babyccino.html",
+  "double_espresso.html",
+};
+
+const int pageCount = sizeof(pages) / sizeof(pages[0]);
+int currentIndex = 0;
+
+unsigned long lastPageChange = 0;
+const unsigned long pageInterval = 5000; // 5 seconds
 
 String getContentType(const String& path) {
   if (path.endsWith(".html")) return "text/html";
@@ -60,28 +71,25 @@ void setup() {
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
-  // Endpoint that tells the browser which page to open
   server.on("/page", HTTP_GET, []() {
     server.send(200, "text/plain", currentPage);
   });
 
-  // Manual test route
   server.on("/set/black", HTTP_GET, []() {
     currentPage = "black_americano.html";
+    currentIndex = 0;
     server.send(200, "text/plain", "OK: black_americano.html");
   });
 
-  // Serve all files from LittleFS
+  server.on("/", HTTP_GET, []() {
+    handleFileRead("/index.html");
+  });
+
   server.onNotFound([]() {
     String path = server.uri();
     if (!handleFileRead(path)) {
       server.send(404, "text/plain", "404 Not Found");
     }
-  });
-
-  // Serve root
-  server.on("/", HTTP_GET, []() {
-    handleFileRead("/index.html");
   });
 
   server.begin();
@@ -90,4 +98,14 @@ void setup() {
 
 void loop() {
   server.handleClient();
+
+  unsigned long now = millis();
+  if (now - lastPageChange >= pageInterval) {
+    lastPageChange = now;
+    currentIndex = (currentIndex + 1) % pageCount;
+    currentPage = pages[currentIndex];
+
+    Serial.print("Switched page to: ");
+    Serial.println(currentPage);
+  }
 }
