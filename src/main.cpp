@@ -4,6 +4,7 @@
 #include <LittleFS.h>
 #include <ArduinoJson.h>
 
+//code to test the website //
 // --- 1. WiFi Credentials ---
 const char* ssid = "Wifi";
 const char* password = "12345678";
