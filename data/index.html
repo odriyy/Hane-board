@@ -1,29 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hane Board</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Barista Instructions</title>
+  
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <h1>Waiting for task...</h1>
+
+  <div id="instruction-wrapper">
+    <h1 id="inst-idle-text">Waiting for Task...</h1>
+    
+    <img id="inst-base-image" src="" alt="Menu Picture" />
+
+    <div id="overlay-container">
+      <div class="custom-box" id="box-0"></div>
+      <div class="custom-box" id="box-1"></div>
+      <div class="custom-box" id="box-2"></div>
+      <div class="custom-box" id="box-3"></div>
+      
+      <div id="inst-special-request"></div>
+    </div>
+  </div>
 
   <script>
-    const espIP = "10.72.225.90";
+    const apiURL = "/api/state";
+    let currentStateString = "";
 
-    async function checkESP() {
+    async function fetchESPState() {
       try {
-        const res = await fetch(`http://${espIP}/page`);
-        const page = (await res.text()).trim();
+        // This adds a random timestamp so Safari is FORCED to ask the ESP32 for fresh data
+        const res = await fetch(apiURL + "?t=" + new Date().getTime(), { cache: 'no-store' });
+        if (!res.ok) return;
 
-        if (page) {
-          window.location.href = page;
+        const textData = await res.text();
+
+        // Prevent screen flickering: only update the DOM if the ESP32 data actually changed
+        if (textData !== currentStateString) {
+          const data = JSON.parse(textData);
+          updateUI(data);
+          currentStateString = textData;
         }
       } catch (e) {
         console.log("ESP32 not reachable");
       }
     }
 
-    setInterval(checkESP, 1000);
+    function updateUI(data) {
+      const idleText = document.getElementById('inst-idle-text');
+      const baseImg = document.getElementById('inst-base-image');
+      const overlayContainer = document.getElementById('overlay-container');
+
+      // 1. Handle Idle State (No drink ordered)
+      if (!data.main_image || data.main_image === "") {
+        baseImg.style.display = "none";
+        overlayContainer.style.display = "none";
+        idleText.style.display = "block";
+        return;
+      }
+
+      // 2. Handle Active Order State
+      idleText.style.display = "none";
+      baseImg.style.display = "block";
+      overlayContainer.style.display = "block";
+      
+      // Automatically points to the correct picture (e.g., /compressed_photos/babyccino.jpg)
+      baseImg.src = data.main_image; 
+
+      // 3. Fill the 4 coordinate boxes safely
+      for (let i = 0; i < 4; i++) {
+        const box = document.getElementById(`box-${i}`);
+        box.innerHTML = ""; // Clear out the previous order's icon
+        box.classList.remove('filled'); // Reset the background styling
+
+        // Check if the JSON actually has an icon for this specific slot
+        if (data.icons && data.icons[i]) {
+          const img = document.createElement('img');
+          img.src = `/compressed_photos/${data.icons[i]}`;
+          box.appendChild(img);
+          box.classList.add('filled'); // Adds the subtle highlight block so it pops
+        } 
+      }
+    }
+
+    // Ping the ESP32 for new data every 1 second
+    setInterval(fetchESPState, 1000);
   </script>
 </body>
 </html>

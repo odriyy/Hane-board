@@ -1,23 +1,103 @@
-html,
-body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #ddd5c3;
-}
+/* =========================================
+   INSTRUCTION OVERLAY STYLES (ORIGINAL MAPPING)
+   ========================================= */
 
-.page {
+#instruction-wrapper {
+  position: relative;
   width: 100vw;
   height: 100vh;
+  background-color: #f4ecdf; /* Cream background */
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+  margin: 0;
 }
 
-.poster-image {
+#inst-idle-text {
+  font-size: 3rem;
+  color: #333;
+  position: absolute;
+  font-family: monospace;
+}
+
+/* The Main Background Picture */
+#inst-base-image {
   width: 100%;
   height: 100%;
+  object-fit: fill; 
+  display: none;
+}
+
+/* The Container that holds the overlays */
+#overlay-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0; 
+  left: 0;
+  display: none; 
+  pointer-events: none; 
+}
+
+/* The 4 Small Customization Boxes */
+.custom-box {
+  position: absolute;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px; /* Original padding */
+  box-sizing: border-box;
+}
+
+/* Subtle highlight glow */
+.custom-box.filled {
+  background: rgba(255, 255, 255, 0.4); 
+  border-radius: 12px;
+}
+
+.custom-box img {
+  max-width: 130%;
+  max-height: 130%;
   object-fit: contain;
-  display: block;
+}
+
+/* --- ORIGINAL COORDINATES --- */
+
+/* Top Left */
+#box-0 { 
+  top: 12%; 
+  left: 6.5%; 
+  width: 17%; 
+  height: 12.5%; 
+}
+
+/* Bottom Left */
+#box-1 { 
+  top: 24.5%; 
+  left: 6.5%; 
+  width: 17%; 
+  height: 12%; 
+}
+
+/* Top Right */
+#box-2 { 
+  top: 12%; 
+  right: 6.5%; 
+  width: 17%; 
+  height: 12.5%; 
+}
+
+/* Bottom Right */
+#box-3 { 
+  top: 24.5%; 
+  right: 6.5%; 
+  width: 17%; 
+  height: 12%; 
+}
+
+/* Special Request (Set to hidden) */
+#inst-special-request {
+  display: none;
 }
