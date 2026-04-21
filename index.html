@@ -7,47 +7,68 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <div class="dashboard-container">
         <header class="header-section">
-            <div>
-                <h1 class="uppercase">Hané Board • Caregiver Dashboard</h1>
-                <div class="text-muted uppercase">Puzzle-Based Task Dispatch & Training System</div>
+            <div class="header-top">
+                <div>
+                    <h1 class="uppercase">Hané Board • Caregiver Dashboard</h1>
+                    <div class="text-muted uppercase">Puzzle-Based Task Dispatch & Training System</div>
+                </div>
+                <button class="btn-primary" onclick="openModal()">+ Add Worker</button>
             </div>
             
             <div class="stats-strip">
                 <div class="stat-card">
-                    <div class="stat-value">4</div>
+                    <div class="stat-value" id="stat-active-workers">4</div>
                     <div class="text-muted uppercase">Active Workers</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value">78%</div>
-                    <div class="text-muted uppercase">Avg Completion</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">42</div>
-                    <div class="text-muted uppercase">Tasks Today</div>
-                </div>
                 <div class="stat-card" style="border-color: var(--status-support); background-color: #FDF3F1;">
-                    <div class="stat-value" style="color: var(--status-support)">1</div>
+                    <div class="stat-value" id="stat-needs-support" style="color: var(--status-support)">1</div>
                     <div class="text-muted uppercase">Needs Support</div>
                 </div>
             </div>
         </header>
 
         <main class="main-content">
-            <aside class="worker-list" id="worker-list-container"></aside>
-            <section class="detail-panel" id="detail-panel"></section>
+            <aside>
+                <div class="worker-list" id="worker-list-container">
+                    </div>
+            </aside>
+
+            <section class="detail-panel" id="detail-panel">
+                </section>
         </main>
     </div>
 
+    <div class="modal-overlay" id="add-worker-modal">
+        <div class="modal-content">
+            <h3>ADD NEW WORKER</h3>
+            <div class="form-group">
+                <label for="new-name">Worker Name</label>
+                <input type="text" id="new-name" class="modal-input" placeholder="e.g. Liam">
+            </div>
+            <div class="form-group">
+                <label for="new-skill">Initial Skill Level</label>
+                <select id="new-skill" class="modal-input">
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-submit" onclick="submitNewWorker()" style="margin-top: 1rem;">Save Worker</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Data structure updated with "latestTask" object for interactive evaluation
-        const workers = [
+        // State Management
+        let workers = [
             {
                 id: 1,
                 name: "ODRI",
@@ -55,18 +76,15 @@
                 trainingPeriod: "Week 2",
                 skillLevel: "Intermediate",
                 independence: "65%",
-                completion: 70,
                 currentTask: "Espresso Extraction",
                 avgTime: "3m 45s",
                 status: "Improving",
                 statusColor: "var(--status-improving)",
-                trend: [40, 50, 55, 65, 70],
                 tasksCompleted: 18,
                 errorCount: 2,
                 strengths: ["Station Cleanliness", "Following Visual Sequence"],
                 needsSupport: ["Tamping Pressure Consistency"],
                 nextTask: "Milk Steaming Basics",
-                notes: "Odri is responding very well to the puzzle dispatch system. Speed has increased steadily. Gentle encouragement needed during busy periods.",
                 latestTask: { name: "Babyccino", time: "2m 15s", rating: 0 },
                 recent: [
                     { task: "Babyccino", time: "2m 15s", result: "Pending Eval" },
@@ -81,18 +99,15 @@
                 trainingPeriod: "Month 1",
                 skillLevel: "Advanced",
                 independence: "90%",
-                completion: 92,
                 currentTask: "Order Dispatch",
                 avgTime: "1m 30s",
-                status: "Ready for Next Level",
+                status: "Ready",
                 statusColor: "var(--status-ready)",
-                trend: [80, 85, 88, 90, 92],
                 tasksCompleted: 45,
                 errorCount: 0,
-                strengths: ["High Independence", "Excellent Accuracy", "Pacing"],
+                strengths: ["High Independence", "Excellent Accuracy"],
                 needsSupport: ["Verbalizing order completion"],
                 nextTask: "Customer Handover",
-                notes: "Bervin has mastered the dispatch puzzle boards. He retrieves and replaces pieces with 100% accuracy. Ready to begin customer interaction training.",
                 latestTask: { name: "Black Americano", time: "1m 20s", rating: 0 },
                 recent: [
                     { task: "Black Americano", time: "1m 20s", result: "Pending Eval" },
@@ -107,18 +122,15 @@
                 trainingPeriod: "Day 1",
                 skillLevel: "Beginner",
                 independence: "30%",
-                completion: 45,
                 currentTask: "Cup Preparation",
                 avgTime: "5m 20s",
                 status: "Needs Support",
                 statusColor: "var(--status-support)",
-                trend: [20, 25, 30, 35, 45],
                 tasksCompleted: 8,
                 errorCount: 5,
                 strengths: ["Enthusiasm", "Selecting Hot Cups"],
-                needsSupport: ["Identifying Iced vs Hot sizes", "Puzzle piece insertion"],
+                needsSupport: ["Puzzle piece insertion"],
                 nextTask: "Continue Cup Prep",
-                notes: "Wen Xuan is still getting used to matching the physical puzzle piece to the screen UI. Recommend 1-on-1 shadowing for the next 2 shifts.",
                 latestTask: { name: "French Mint Choco", time: "5m 45s", rating: 0 },
                 recent: [
                     { task: "French Mint Choco", time: "5m 45s", result: "Pending Eval" },
@@ -133,18 +145,15 @@
                 trainingPeriod: "Week 3",
                 skillLevel: "Intermediate",
                 independence: "80%",
-                completion: 85,
                 currentTask: "Milk Steaming",
                 avgTime: "2m 50s",
                 status: "Consistent",
                 statusColor: "var(--status-consistent)",
-                trend: [70, 75, 80, 82, 85],
                 tasksCompleted: 24,
                 errorCount: 1,
                 strengths: ["Temperature control", "Safety protocols"],
                 needsSupport: ["Microfoam texture consistency"],
                 nextTask: "Latte Art Foundation",
-                notes: "Yu shows great confidence with the steam wand. Safety steps are followed perfectly every time. Consistency is excellent.",
                 latestTask: { name: "Double Espresso", time: "2m 30s", rating: 0 },
                 recent: [
                     { task: "Double Espresso", time: "2m 30s", result: "Pending Eval" },
@@ -164,11 +173,25 @@
             </svg>
         `;
 
+        // Update Global Stats
+        function updateStats() {
+            document.getElementById('stat-active-workers').innerText = workers.length;
+            const needsSupportCount = workers.filter(w => w.status === "Needs Support").length;
+            document.getElementById('stat-needs-support').innerText = needsSupportCount;
+        }
+
+        // Render List
         function renderList() {
             listContainer.innerHTML = '';
             workers.forEach((worker, index) => {
                 const card = document.createElement('div');
-                card.className = `worker-card ${index === 0 ? 'active' : ''}`;
+                // Auto-select the first worker visually
+                const activeId = document.querySelector('.worker-card.active') 
+                    ? document.querySelector('.worker-card.active').dataset.id 
+                    : (index === 0 ? worker.id : null);
+
+                card.className = `worker-card ${worker.id == activeId ? 'active' : ''}`;
+                card.dataset.id = worker.id;
                 card.onclick = () => selectWorker(worker.id, card);
 
                 card.innerHTML = `
@@ -181,15 +204,6 @@
                             <span>PERIOD: ${worker.trainingPeriod}</span>
                             <span>INDEP: ${worker.independence}</span>
                         </div>
-                        <div class="progress-wrapper">
-                            <div class="progress-header">
-                                <span>COMPLETION</span>
-                                <span>${worker.completion}%</span>
-                            </div>
-                            <div class="progress-track">
-                                <div class="progress-fill" style="width: ${worker.completion}%;"></div>
-                            </div>
-                        </div>
                     </div>
                     <div class="status-tag" style="color: ${worker.statusColor}; border-color: ${worker.statusColor}; background-color: ${worker.statusColor}15;">
                         ${worker.status}
@@ -197,29 +211,25 @@
                 `;
                 listContainer.appendChild(card);
             });
+            updateStats();
         }
 
+        // Select Worker
         function selectWorker(id, cardElement) {
             document.querySelectorAll('.worker-card').forEach(c => c.classList.remove('active'));
             if(cardElement) cardElement.classList.add('active');
             
             const worker = workers.find(w => w.id === id);
             renderDetails(worker);
+            
+            // Scroll to details on mobile
+            if (window.innerWidth <= 1024) {
+                detailPanel.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
+        // Render Details
         function renderDetails(worker) {
-            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-            
-            let chartHTML = '';
-            worker.trend.forEach((val, i) => {
-                chartHTML += `
-                    <div class="bar-container">
-                        <div class="bar" style="height: ${val}%;"></div>
-                        <div class="bar-label">${days[i]}</div>
-                    </div>
-                `;
-            });
-
             let strengthsHTML = worker.strengths.map(s => `<li>${s}</li>`).join('');
             let needsHTML = worker.needsSupport.map(n => `<li class="support-item">${n}</li>`).join('');
             
@@ -230,26 +240,31 @@
                 </div>
             `).join('');
 
+            // Fallback for new workers with no activity
+            if(worker.recent.length === 0) {
+                activityHTML = `<div class="text-muted">No recent task history.</div>`;
+            }
+
             detailPanel.innerHTML = `
                 <div class="detail-header">
                     <div class="avatar">${avatarSVG}</div>
                     <div class="detail-title">
                         <h2>${worker.name}</h2>
-                        <div class="status-tag" style="position: static; display: inline-block; color: ${worker.statusColor}; border-color: ${worker.statusColor}; background-color: ${worker.statusColor}15;">
+                        <div class="status-tag" style="position: static; display: inline-block; margin-top:0.5rem; color: ${worker.statusColor}; border-color: ${worker.statusColor}; background-color: ${worker.statusColor}15;">
                             ${worker.status}
                         </div>
                     </div>
                 </div>
 
                 <div class="chart-section evaluation-section">
-                    <h3 class="uppercase" style="color: var(--status-ready);">Evaluate Latest Menu</h3>
+                    <h3 class="uppercase" style="color: var(--status-ready);">Evaluate Latest Order</h3>
                     <div class="eval-grid">
                         <div>
-                            <strong>Menu Finished:</strong><br> ${worker.latestTask.name}<br>
+                            <strong>Order Finished:</strong><br> ${worker.latestTask.name}<br>
                             <span class="time-highlight">⏱️ ${worker.latestTask.time}</span>
                         </div>
                         <div>
-                            <strong>Rate Independence:</strong>
+                            <strong>Rate Food Quality:</strong>
                             <div class="stars" id="stars-${worker.id}">
                                 <span onclick="setRating(${worker.id}, 1)">★</span>
                                 <span onclick="setRating(${worker.id}, 2)">★</span>
@@ -262,11 +277,11 @@
                             <strong>What needs improvement?</strong>
                             <select id="improvement-${worker.id}" class="eval-select">
                                 <option value="">Select an area...</option>
-                                <option value="Speed & Pacing">Speed & Pacing</option>
-                                <option value="Following Puzzle Steps">Following Puzzle Steps</option>
                                 <option value="Station Cleanliness">Station Cleanliness</option>
                                 <option value="Matching Ingredients">Matching Ingredients</option>
-                                <option value="Verbalizing Completion">Verbalizing Completion</option>
+                                <option value="Drink Presentation">Drink Presentation</option>
+                                <option value="Speed & Pacing">Speed & Pacing</option>
+                                <option value="Following Puzzle Steps">Following Puzzle Steps</option>
                             </select>
                             <button onclick="saveEvaluation(${worker.id})" class="btn-submit">Save Feedback</button>
                         </div>
@@ -285,6 +300,18 @@
                     <div class="detail-box">
                         <div class="detail-box-title">INDEPENDENCE SCORE</div>
                         <div class="detail-box-value" id="indep-score-${worker.id}">${worker.independence}</div>
+                    </div>
+                    <div class="detail-box">
+                        <div class="detail-box-title">TASKS DONE TODAY</div>
+                        <div class="detail-box-value">${worker.tasksCompleted}</div>
+                    </div>
+                    <div class="detail-box">
+                        <div class="detail-box-title">ERRORS / RETRIES</div>
+                        <div class="detail-box-value">${worker.errorCount}</div>
+                    </div>
+                    <div class="detail-box" style="background-color: var(--text-dark); color: var(--bg-page);">
+                        <div class="detail-box-title" style="color: var(--border-color);">RECOMMENDED NEXT</div>
+                        <div class="detail-box-value" style="font-size: 1.2rem;">${worker.nextTask}</div>
                     </div>
                 </div>
 
@@ -315,7 +342,7 @@
             }
         }
 
-        // Interactivity Functions
+        // --- Interactive Feedback Features ---
         function setRating(workerId, stars) {
             const worker = workers.find(w => w.id === workerId);
             worker.latestTask.rating = stars; // Save state
@@ -335,12 +362,12 @@
             const selectBox = document.getElementById(`improvement-${workerId}`);
             const newImprovement = selectBox.value;
 
-            if (worker.latestTask.rating === 0) {
+            if (worker.latestTask.rating === 0 && worker.latestTask.name !== "N/A") {
                 alert("Please select a star rating first.");
                 return;
             }
 
-            // If an improvement area is selected, add it directly to their "Areas for Support" list interactively
+            // Add improvement area to the list dynamically
             if (newImprovement && !worker.needsSupport.includes(newImprovement)) {
                 worker.needsSupport.push(newImprovement);
                 const list = document.getElementById(`needs-list-${workerId}`);
@@ -350,8 +377,68 @@
                 list.appendChild(newItem);
             }
 
-            alert(`Feedback saved for ${worker.name}!\nTask: ${worker.latestTask.name}\nRating: ${worker.latestTask.rating} Stars`);
+            alert(`Feedback saved for ${worker.name}!`);
             selectBox.value = ""; // Reset dropdown
+        }
+
+        // --- Add Worker Modal Features ---
+        const modal = document.getElementById('add-worker-modal');
+
+        function openModal() {
+            modal.classList.add('show');
+            document.getElementById('new-name').focus();
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+            document.getElementById('new-name').value = '';
+            document.getElementById('new-skill').value = 'Beginner';
+        }
+
+        function submitNewWorker() {
+            const nameInput = document.getElementById('new-name').value.trim();
+            const skillInput = document.getElementById('new-skill').value;
+
+            if (!nameInput) {
+                alert("Please enter a worker name.");
+                return;
+            }
+
+            // Generate new ID based on highest existing ID
+            const newId = workers.length > 0 ? Math.max(...workers.map(w => w.id)) + 1 : 1;
+            
+            // Current Date for Start Date
+            const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+            const newWorker = {
+                id: newId,
+                name: nameInput.toUpperCase(),
+                startDate: today,
+                trainingPeriod: "Day 1",
+                skillLevel: skillInput,
+                independence: "0%",
+                currentTask: "Orientation Setup",
+                avgTime: "--",
+                status: "Needs Support", // Defaults to needs support to trigger attention
+                statusColor: "var(--status-support)",
+                tasksCompleted: 0,
+                errorCount: 0,
+                strengths: ["Willingness to learn"],
+                needsSupport: ["Familiarization with puzzles"],
+                nextTask: "Observe Station Prep",
+                latestTask: { name: "N/A", time: "--", rating: 0 },
+                recent: []
+            };
+
+            // Add to the beginning of the array so it shows up at the top
+            workers.unshift(newWorker);
+            
+            renderList();
+            closeModal();
+            
+            // Automatically select the newly created worker
+            const newCard = document.querySelector(`.worker-card[data-id="${newId}"]`);
+            selectWorker(newId, newCard);
         }
 
         // Initialize Page
