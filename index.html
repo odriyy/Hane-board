@@ -35,12 +35,10 @@
 
         <main class="main-content">
             <aside>
-                <div class="worker-list" id="worker-list-container">
-                    </div>
+                <div class="worker-list" id="worker-list-container"></div>
             </aside>
 
-            <section class="detail-panel" id="detail-panel">
-                </section>
+            <section class="detail-panel" id="detail-panel"></section>
         </main>
     </div>
 
@@ -165,35 +163,21 @@
 
         const listContainer = document.getElementById('worker-list-container');
         const detailPanel = document.getElementById('detail-panel');
+        const avatarSVG = `<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`;
 
-        const avatarSVG = `
-            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-        `;
-
-        // Update Global Stats
         function updateStats() {
             document.getElementById('stat-active-workers').innerText = workers.length;
-            const needsSupportCount = workers.filter(w => w.status === "Needs Support").length;
-            document.getElementById('stat-needs-support').innerText = needsSupportCount;
+            document.getElementById('stat-needs-support').innerText = workers.filter(w => w.status === "Needs Support").length;
         }
 
-        // Render List
         function renderList() {
             listContainer.innerHTML = '';
             workers.forEach((worker, index) => {
                 const card = document.createElement('div');
-                // Auto-select the first worker visually
-                const activeId = document.querySelector('.worker-card.active') 
-                    ? document.querySelector('.worker-card.active').dataset.id 
-                    : (index === 0 ? worker.id : null);
-
+                const activeId = document.querySelector('.worker-card.active')?.dataset.id || (index === 0 ? worker.id : null);
                 card.className = `worker-card ${worker.id == activeId ? 'active' : ''}`;
                 card.dataset.id = worker.id;
                 card.onclick = () => selectWorker(worker.id, card);
-
                 card.innerHTML = `
                     <div class="avatar">${avatarSVG}</div>
                     <div class="worker-card-content">
@@ -205,54 +189,35 @@
                             <span>INDEP: ${worker.independence}</span>
                         </div>
                     </div>
-                    <div class="status-tag" style="color: ${worker.statusColor}; border-color: ${worker.statusColor}; background-color: ${worker.statusColor}15;">
-                        ${worker.status}
-                    </div>
-                `;
+                    <div class="status-tag" style="color: ${worker.statusColor}; border-color: ${worker.statusColor}; background-color: ${worker.statusColor}15;">${worker.status}</div>`;
                 listContainer.appendChild(card);
             });
             updateStats();
         }
 
-        // Select Worker
         function selectWorker(id, cardElement) {
             document.querySelectorAll('.worker-card').forEach(c => c.classList.remove('active'));
             if(cardElement) cardElement.classList.add('active');
-            
             const worker = workers.find(w => w.id === id);
             renderDetails(worker);
-            
-            // Scroll to details on mobile
-            if (window.innerWidth <= 1024) {
-                detailPanel.scrollIntoView({ behavior: 'smooth' });
-            }
+            if (window.innerWidth <= 1024) detailPanel.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Render Details
         function renderDetails(worker) {
             let strengthsHTML = worker.strengths.map(s => `<li>${s}</li>`).join('');
             let needsHTML = worker.needsSupport.map(n => `<li class="support-item">${n}</li>`).join('');
-            
-            let activityHTML = worker.recent.map(act => `
+            let activityHTML = worker.recent.length ? worker.recent.map(act => `
                 <div class="activity-item">
                     <span>${act.task} <span style="font-weight: 400; font-size: 0.9rem;">(${act.result})</span></span>
                     <span class="activity-time">${act.time}</span>
-                </div>
-            `).join('');
-
-            // Fallback for new workers with no activity
-            if(worker.recent.length === 0) {
-                activityHTML = `<div class="text-muted">No recent task history.</div>`;
-            }
+                </div>`).join('') : `<div class="text-muted">No recent task history.</div>`;
 
             detailPanel.innerHTML = `
                 <div class="detail-header">
                     <div class="avatar">${avatarSVG}</div>
                     <div class="detail-title">
                         <h2>${worker.name}</h2>
-                        <div class="status-tag" style="position: static; display: inline-block; margin-top:0.5rem; color: ${worker.statusColor}; border-color: ${worker.statusColor}; background-color: ${worker.statusColor}15;">
-                            ${worker.status}
-                        </div>
+                        <div class="status-tag" style="position: static; display: inline-block; margin-top:0.5rem; color: ${worker.statusColor}; border-color: ${worker.statusColor}; background-color: ${worker.statusColor}15;">${worker.status}</div>
                     </div>
                 </div>
 
@@ -282,169 +247,116 @@
                                 <option value="Drink Presentation">Drink Presentation</option>
                                 <option value="Speed & Pacing">Speed & Pacing</option>
                                 <option value="Following Puzzle Steps">Following Puzzle Steps</option>
+                                <option value="Redo Training">Redo Training</option>
                             </select>
+                            <button onclick="getAISuggestion(${worker.id})" id="ai-btn-${worker.id}" class="btn-primary" style="background-color: var(--status-ready); margin-top: 10px; width: 100%; font-size: 1rem;">
+                                ✨ Ask AI Assistant
+                            </button>
                             <button onclick="saveEvaluation(${worker.id})" class="btn-submit">Save Feedback</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="detail-grid">
-                    <div class="detail-box">
-                        <div class="detail-box-title">CURRENT TASK</div>
-                        <div class="detail-box-value">${worker.currentTask}</div>
-                    </div>
-                    <div class="detail-box">
-                        <div class="detail-box-title">AVG COMPLETION TIME</div>
-                        <div class="detail-box-value">${worker.avgTime}</div>
-                    </div>
-                    <div class="detail-box">
-                        <div class="detail-box-title">INDEPENDENCE SCORE</div>
-                        <div class="detail-box-value" id="indep-score-${worker.id}">${worker.independence}</div>
-                    </div>
-                    <div class="detail-box">
-                        <div class="detail-box-title">TASKS DONE TODAY</div>
-                        <div class="detail-box-value">${worker.tasksCompleted}</div>
-                    </div>
-                    <div class="detail-box">
-                        <div class="detail-box-title">ERRORS / RETRIES</div>
-                        <div class="detail-box-value">${worker.errorCount}</div>
-                    </div>
-                    <div class="detail-box" style="background-color: var(--text-dark); color: var(--bg-page);">
-                        <div class="detail-box-title" style="color: var(--border-color);">RECOMMENDED NEXT</div>
-                        <div class="detail-box-value" style="font-size: 1.2rem;">${worker.nextTask}</div>
-                    </div>
+                    <div class="detail-box"><div class="detail-box-title">CURRENT TASK</div><div class="detail-box-value">${worker.currentTask}</div></div>
+                    <div class="detail-box"><div class="detail-box-title">AVG COMPLETION TIME</div><div class="detail-box-value">${worker.avgTime}</div></div>
+                    <div class="detail-box"><div class="detail-box-title">INDEPENDENCE SCORE</div><div class="detail-box-value">${worker.independence}</div></div>
+                    <div class="detail-box"><div class="detail-box-title">TASKS DONE TODAY</div><div class="detail-box-value">${worker.tasksCompleted}</div></div>
+                    <div class="detail-box"><div class="detail-box-title">ERRORS / RETRIES</div><div class="detail-box-value">${worker.errorCount}</div></div>
+                    <div class="detail-box" style="background-color: var(--text-dark); color: var(--bg-page);"><div class="detail-box-title" style="color: var(--border-color);">RECOMMENDED NEXT</div><div class="detail-box-value" style="font-size: 1.2rem;">${worker.nextTask}</div></div>
                 </div>
 
                 <div class="qualitative-grid">
-                    <div class="list-box">
-                        <h3 class="uppercase" style="color: var(--status-consistent);">Strengths Observed</h3>
-                        <ul>${strengthsHTML}</ul>
-                    </div>
-                    <div class="list-box">
-                        <h3 class="uppercase" style="color: var(--status-support);">Areas for Support</h3>
-                        <ul id="needs-list-${worker.id}">${needsHTML}</ul>
-                    </div>
+                    <div class="list-box"><h3 class="uppercase" style="color: var(--status-consistent);">Strengths Observed</h3><ul>${strengthsHTML}</ul></div>
+                    <div class="list-box"><h3 class="uppercase" style="color: var(--status-support);">Areas for Support</h3><ul id="needs-list-${worker.id}">${needsHTML}</ul></div>
                 </div>
 
-                <div class="chart-section recent-activity">
-                    <h3 class="uppercase">Recent Task History</h3>
-                    <div style="margin-top: 1rem;">
-                        ${activityHTML}
-                    </div>
-                </div>
-            `;
+                <div class="chart-section recent-activity"><h3 class="uppercase">Recent Task History</h3><div style="margin-top: 1rem;">${activityHTML}</div></div>`;
             
             detailPanel.classList.add('visible');
+            if(worker.latestTask.rating > 0) setRating(worker.id, worker.latestTask.rating);
+        }
+
+        // --- AI & Logic Functions ---
+        async function getAISuggestion(workerId) {
+            const worker = workers.find(w => w.id === workerId);
+            const btn = document.getElementById(`ai-btn-${workerId}`);
+            const selectBox = document.getElementById(`improvement-${workerId}`);
             
-            // Re-apply saved rating if returning to this worker
-            if(worker.latestTask.rating > 0) {
-                setRating(worker.id, worker.latestTask.rating);
+            if (worker.latestTask.rating === 0) {
+                alert("Please give a star rating first so the AI can analyze the quality.");
+                return;
+            }
+
+            btn.innerText = "Thinking...";
+
+            const workerData = {
+                name: worker.name,
+                taskName: worker.latestTask.name,
+                time: worker.latestTask.time,
+                rating: worker.latestTask.rating
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/suggest', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ workerData })
+                });
+                const data = await response.json();
+                selectBox.value = data.suggestion;
+                btn.innerText = "✨ AI Suggested!";
+            } catch (error) {
+                console.error("AI Server error:", error);
+                btn.innerText = "AI Offline";
+                alert("AI Server is not running. Make sure you started 'node server.js'");
             }
         }
 
-        // --- Interactive Feedback Features ---
         function setRating(workerId, stars) {
             const worker = workers.find(w => w.id === workerId);
-            worker.latestTask.rating = stars; // Save state
-            
-            const starElements = document.querySelectorAll(`#stars-${workerId} span`);
-            starElements.forEach((star, index) => {
-                if (index < stars) {
-                    star.classList.add('active');
-                } else {
-                    star.classList.remove('active');
-                }
-            });
+            worker.latestTask.rating = stars;
+            document.querySelectorAll(`#stars-${workerId} span`).forEach((s, i) => s.classList.toggle('active', i < stars));
         }
 
         function saveEvaluation(workerId) {
             const worker = workers.find(w => w.id === workerId);
             const selectBox = document.getElementById(`improvement-${workerId}`);
-            const newImprovement = selectBox.value;
-
-            if (worker.latestTask.rating === 0 && worker.latestTask.name !== "N/A") {
-                alert("Please select a star rating first.");
-                return;
+            const val = selectBox.value;
+            if (worker.latestTask.rating === 0) return alert("Select a rating first.");
+            if (val && !worker.needsSupport.includes(val)) {
+                worker.needsSupport.push(val);
+                const li = document.createElement('li');
+                li.textContent = val;
+                li.style.color = "var(--status-support)";
+                document.getElementById(`needs-list-${workerId}`).appendChild(li);
             }
-
-            // Add improvement area to the list dynamically
-            if (newImprovement && !worker.needsSupport.includes(newImprovement)) {
-                worker.needsSupport.push(newImprovement);
-                const list = document.getElementById(`needs-list-${workerId}`);
-                const newItem = document.createElement('li');
-                newItem.textContent = newImprovement;
-                newItem.style.color = "var(--status-support)";
-                list.appendChild(newItem);
-            }
-
             alert(`Feedback saved for ${worker.name}!`);
-            selectBox.value = ""; // Reset dropdown
+            selectBox.value = "";
         }
 
-        // --- Add Worker Modal Features ---
+        // --- Modal ---
         const modal = document.getElementById('add-worker-modal');
-
-        function openModal() {
-            modal.classList.add('show');
-            document.getElementById('new-name').focus();
-        }
-
-        function closeModal() {
-            modal.classList.remove('show');
-            document.getElementById('new-name').value = '';
-            document.getElementById('new-skill').value = 'Beginner';
-        }
-
+        function openModal() { modal.classList.add('show'); document.getElementById('new-name').focus(); }
+        function closeModal() { modal.classList.remove('show'); document.getElementById('new-name').value = ''; }
         function submitNewWorker() {
-            const nameInput = document.getElementById('new-name').value.trim();
-            const skillInput = document.getElementById('new-skill').value;
-
-            if (!nameInput) {
-                alert("Please enter a worker name.");
-                return;
-            }
-
-            // Generate new ID based on highest existing ID
-            const newId = workers.length > 0 ? Math.max(...workers.map(w => w.id)) + 1 : 1;
-            
-            // Current Date for Start Date
-            const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-
+            const name = document.getElementById('new-name').value.trim();
+            if (!name) return alert("Enter a name.");
             const newWorker = {
-                id: newId,
-                name: nameInput.toUpperCase(),
-                startDate: today,
-                trainingPeriod: "Day 1",
-                skillLevel: skillInput,
-                independence: "0%",
-                currentTask: "Orientation Setup",
-                avgTime: "--",
-                status: "Needs Support", // Defaults to needs support to trigger attention
-                statusColor: "var(--status-support)",
-                tasksCompleted: 0,
-                errorCount: 0,
-                strengths: ["Willingness to learn"],
-                needsSupport: ["Familiarization with puzzles"],
-                nextTask: "Observe Station Prep",
-                latestTask: { name: "N/A", time: "--", rating: 0 },
-                recent: []
+                id: Date.now(), name: name.toUpperCase(), startDate: new Date().toLocaleDateString('en-GB'),
+                trainingPeriod: "Day 1", skillLevel: document.getElementById('new-skill').value,
+                independence: "0%", currentTask: "Orientation", avgTime: "--", status: "Needs Support",
+                statusColor: "var(--status-support)", tasksCompleted: 0, errorCount: 0,
+                strengths: ["New Joiner"], needsSupport: ["Training"], nextTask: "Observation",
+                latestTask: { name: "N/A", time: "--", rating: 0 }, recent: []
             };
-
-            // Add to the beginning of the array so it shows up at the top
             workers.unshift(newWorker);
-            
-            renderList();
-            closeModal();
-            
-            // Automatically select the newly created worker
-            const newCard = document.querySelector(`.worker-card[data-id="${newId}"]`);
-            selectWorker(newId, newCard);
+            renderList(); closeModal();
+            selectWorker(newWorker.id, document.querySelector(`.worker-card[data-id="${newWorker.id}"]`));
         }
 
-        // Initialize Page
         renderList();
         selectWorker(1, document.querySelector('.worker-card'));
-
     </script>
 </body>
 </html>
