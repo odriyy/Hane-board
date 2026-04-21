@@ -1,7 +1,8 @@
 /* =========================================
-   INSTRUCTION OVERLAY STYLES (ORIGINAL MAPPING)
+   BARISTA INSTRUCTIONS - BABYCINNO 2x2 GRID
    ========================================= */
 
+/* 1. Main Layout Wrapper */
 #instruction-wrapper {
   position: relative;
   width: 100vw;
@@ -12,16 +13,19 @@
   align-items: center;
   overflow: hidden;
   margin: 0;
+  padding: 0;
 }
 
+/* 2. Idle Text (Waiting for Task) */
 #inst-idle-text {
-  font-size: 3rem;
+  font-size: 3.5rem;
   color: #333;
   position: absolute;
-  font-family: monospace;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
 }
 
-/* The Main Background Picture */
+/* 3. The Full-Screen Poster Background */
 #inst-base-image {
   width: 100%;
   height: 100%;
@@ -29,7 +33,7 @@
   display: none;
 }
 
-/* The Container that holds the overlays */
+/* 4. The Overlay Layer */
 #overlay-container {
   position: absolute;
   width: 100%;
@@ -40,64 +44,72 @@
   pointer-events: none; 
 }
 
-/* The 4 Small Customization Boxes */
+/* 5. Icon Box Logic (The Cage) */
 .custom-box {
   position: absolute;
-  background: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px; /* Original padding */
+  
+  /* Breathing room so icons don't hit the grid lines */
+  padding: 1.5%; 
+  
+  background: transparent; 
   box-sizing: border-box;
+  overflow: hidden; 
 }
 
-/* Subtle highlight glow */
+/* 6. The Actual Icon (The Image) */
+.custom-box img {
+  /* Set to 85% to match the weight of your hand-drawn icons */
+  width: 130%;    
+  height: 130%;   
+  object-fit: contain; 
+}
+
+/* 7. Subtle Glow when an icon is present */
 .custom-box.filled {
   background: rgba(255, 255, 255, 0.4); 
-  border-radius: 12px;
+  border-radius: 8px; /* Slightly sharper corners for the smaller grid */
 }
 
-.custom-box img {
-  max-width: 130%;
-  max-height: 130%;
-  object-fit: contain;
-}
+/* =========================================
+   EXACT MAPPING TO THE TOP-RIGHT 2x2 GRID
+   ========================================= */
 
-/* --- ORIGINAL COORDINATES --- */
-
-/* Top Left */
+/* Top Left Slot inside the Grid */
 #box-0 { 
-  top: 12%; 
-  left: 6.5%; 
+  top: 12.5%; 
+  left: 58.5%; 
   width: 17%; 
-  height: 12.5%; 
+  height: 12%; 
 }
 
-/* Bottom Left */
+/* Bottom Left Slot inside the Grid */
 #box-1 { 
   top: 24.5%; 
-  left: 6.5%; 
+  left: 58.5%; 
   width: 17%; 
   height: 12%; 
 }
 
-/* Top Right */
+/* Top Right Slot inside the Grid */
 #box-2 { 
-  top: 12%; 
-  right: 6.5%; 
+  top: 12.5%; 
+  right: 7%; 
   width: 17%; 
-  height: 12.5%; 
+  height: 12%; 
 }
 
-/* Bottom Right */
+/* Bottom Right Slot inside the Grid */
 #box-3 { 
   top: 24.5%; 
-  right: 6.5%; 
+  right: 7%; 
   width: 17%; 
   height: 12%; 
 }
 
-/* Special Request (Set to hidden) */
+/* Special Request logic hidden as requested */
 #inst-special-request {
   display: none;
 }

@@ -55,7 +55,7 @@ void setup() {
     } 
     else if (currentState == 1) {
       // STATE 1: BABYCCINO 
-      doc["main_image"] = "/compressed_photos/babyccino.png";
+      doc["main_image"] = "/compressed_photos/Babyccino.png";
       doc["drink_name"] = "Babyccino";
       
       JsonArray icons = doc.createNestedArray("icons");
@@ -64,7 +64,7 @@ void setup() {
     } 
     else if (currentState == 2) {
       // STATE 2: BLACK AMERICANO
-      doc["main_image"] = "/compressed_photos/black_(americano).png";
+      doc["main_image"] = "/compressed_photos/black_americano.png";
       doc["drink_name"] = "Black Americano";
       
       JsonArray icons = doc.createNestedArray("icons");
