@@ -39,7 +39,6 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   // --- 5. Static File Routes (WITH ANTI-CACHE) ---
-  // We tell the server to force the iPad to always fetch the newest images and HTML
   server.serveStatic("/", LittleFS, "/")
         .setDefaultFile("index.html")
         .setCacheControl("no-cache, no-store, must-revalidate");
@@ -57,21 +56,76 @@ void setup() {
       // STATE 1: BABYCCINO 
       doc["main_image"] = "/compressed_photos/Babyccino.png";
       doc["drink_name"] = "Babyccino";
-      
       JsonArray icons = doc.createNestedArray("icons");
-      icons.add("hot.png");    // Slot 0
-      icons.add("regular.png"); // Slot 1
+      icons.add("hot.png");    
+      icons.add("regular.png"); 
     } 
     else if (currentState == 2) {
       // STATE 2: BLACK AMERICANO
       doc["main_image"] = "/compressed_photos/black_americano.png";
       doc["drink_name"] = "Black Americano";
-      
       JsonArray icons = doc.createNestedArray("icons");
-      icons.add("hot.png");    // Slot 0
-      icons.add("8oz.png");    // Slot 1
-      icons.add("double.png"); // Slot 2
-      icons.add("oat.png");    // Slot 3
+      icons.add("hot.png");    
+      icons.add("8oz.png");    
+      icons.add("double.png"); 
+      icons.add("oat.png");    
+    }
+    else if (currentState == 3) {
+      // STATE 3: DOUBLE ESPRESSO
+      doc["main_image"] = "/compressed_photos/double_espresso.png";
+      doc["drink_name"] = "Double Espresso";
+      JsonArray icons = doc.createNestedArray("icons");
+      icons.add("hot.png");    
+      icons.add("6oz.png");    
+      icons.add("double.png"); 
+    }
+    else if (currentState == 4) {
+      // STATE 4: FRENCH MINT CHOCO
+      doc["main_image"] = "/compressed_photos/french_mint_choco.png";
+      doc["drink_name"] = "French Mint Choco";
+      JsonArray icons = doc.createNestedArray("icons");
+      icons.add("iced.png");    
+      icons.add("8oz.png");    
+      icons.add("low_fat.png"); 
+    }
+    else if (currentState == 5) {
+      // STATE 5: MATCHA
+      doc["main_image"] = "/compressed_photos/matcha.png";
+      doc["drink_name"] = "Matcha";
+      JsonArray icons = doc.createNestedArray("icons");
+      icons.add("hot.png");    
+      icons.add("8oz.png");    
+      icons.add("single.png"); 
+      icons.add("soy.png"); 
+    }
+    else if (currentState == 6) {
+      // STATE 6: MOCHA
+      doc["main_image"] = "/compressed_photos/mocha.png";
+      doc["drink_name"] = "Mocha";
+      JsonArray icons = doc.createNestedArray("icons");
+      icons.add("hot.png");    
+      icons.add("8oz.png");    
+      icons.add("double.png"); 
+      icons.add("regular.png"); 
+    }
+    else if (currentState == 7) {
+      // STATE 7: SPICED CHAI
+      doc["main_image"] = "/compressed_photos/spiced_chai.png";
+      doc["drink_name"] = "Spiced Chai";
+      JsonArray icons = doc.createNestedArray("icons");
+      icons.add("iced.png");    
+      icons.add("8oz.png");    
+      icons.add("oat.png"); 
+    }
+    else if (currentState == 8) {
+      // STATE 8: WHITE LATTE
+      doc["main_image"] = "/compressed_photos/white_latte.png";
+      doc["drink_name"] = "White Latte";
+      JsonArray icons = doc.createNestedArray("icons");
+      icons.add("hot.png");    
+      icons.add("8oz.png");    
+      icons.add("single.png"); 
+      icons.add("soy.png"); 
     }
 
     String responseStr;
@@ -95,7 +149,8 @@ void loop() {
   unsigned long now = millis();
   if (now - lastChange > 8000) {
     lastChange = now;
-    currentState = (currentState + 1) % 3; // Cycles 0 -> 1 -> 2 -> 0
+    // Modulo 9 because we have 9 total states (0 through 8)
+    currentState = (currentState + 1) % 9; 
     
     Serial.print("Mock State Switched To: ");
     Serial.println(currentState);
