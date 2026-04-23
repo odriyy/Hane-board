@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Profile - Hane Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .eval-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-top: 1rem; align-items: stretch; }
+        .eval-box { background-color: #E5D5B7; border-radius: 8px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .stars span { font-size: 2.2rem; color: #C8B89E; cursor: pointer; transition: color 0.2s; }
+        .stars span.active { color: #D2AA43; }
+        .eval-select { width: 100%; padding: 10px 12px; margin-top: 5px; border: none; border-radius: 6px; font-family: 'Nunito', sans-serif; font-weight: 600; color: #1A1612; background-color: #fff; }
+
+        @media (max-width: 600px) {
+            .eval-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .profile-name { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="header-section" style="margin-bottom: 2rem;">
+            <div class="header-top">
+                <button class="btn-primary" onclick="window.location.href='index.html'">← Back to Directory</button>
+            </div>
+        </header>
+
+        <main style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div id="worker-name-title" class="profile-name" style="font-size: 2rem; font-weight: 700; font-family: 'Quicksand'; color: #1A1612;">Loading...</div>
+            <div class="text-muted" style="margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; font-size: 0.9rem; color: #5C5245;">Evaluate Latest Order</div>
+
+            <div class="eval-grid">
+                <div class="eval-box">
+                    <strong style="font-family: 'Quicksand'; text-transform: uppercase; font-size: 0.85rem;">Assigned Task</strong>
+                    <select id="task-assign-inline" class="eval-select" onchange="updateTaskMemory()">
+                        <option value="Babyccino">Babyccino</option>
+                        <option value="Black Americano">Black Americano</option>
+                        <option value="Cup Preparation">Cup Preparation</option>
+                        <option value="Double Espresso">Double Espresso</option>
+                        <option value="Espresso Extraction">Espresso Extraction</option>
+                        <option value="Milk Steaming">Milk Steaming</option>
+                        <option value="Order Dispatch">Order Dispatch</option>
+                    </select>
+                    <div style="margin-top: auto; padding-top: 10px; font-weight: 600; color: #1A1612;">Time: 3:45</div>
+                </div>
+                
+                <div class="eval-box">
+                    <strong style="font-family: 'Quicksand'; text-transform: uppercase; font-size: 0.85rem;">Rate Food Quality</strong>
+                    <div class="stars" id="star-rating">
+                        <span onclick="setRating(1)">★</span>
+                        <span onclick="setRating(2)">★</span>
+                        <span onclick="setRating(3)">★</span>
+                        <span onclick="setRating(4)">★</span>
+                        <span onclick="setRating(5)">★</span>
+                    </div>
+                </div>
+                
+                <div class="eval-box">
+                    <strong style="font-family: 'Quicksand'; text-transform: uppercase; font-size: 0.85rem;">Improvement</strong>
+                    <select id="improvement-select" class="eval-select">
+                        <option value="">Select Category...</option>
+                        <option value="Speed & Pacing">Speed & Pacing</option>
+                        <option value="Redo Training">Redo Training</option>
+                        <option value="Station Cleanliness">Station Cleanliness</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: center;">
+                <button class="btn-primary btn-save-record" onclick="saveAuditRecord()">Save Audit Record</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const workerId = parseInt(urlParams.get('id'));
+        let workers = JSON.parse(localStorage.getItem('hane_workers')) || [];
+        let currentWorker = workers.find(w => w.id === workerId);
+
+        function formatName(n) { return n.charAt(0).toUpperCase() + n.slice(1).toLowerCase(); }
+
+        function initPage() {
+            if (currentWorker) {
+                document.getElementById('worker-name-title').innerText = formatName(currentWorker.name);
+                document.getElementById('task-assign-inline').value = currentWorker.currentTask;
+            }
+        }
+
+        function updateTaskMemory() {
+            if(currentWorker) {
+                currentWorker.currentTask = document.getElementById('task-assign-inline').value;
+                localStorage.setItem('hane_workers', JSON.stringify(workers));
+            }
+        }
+
+        let currentStars = 0;
+        function setRating(n) {
+            currentStars = n;
+            document.querySelectorAll('.stars span').forEach((s, i) => s.classList.toggle('active', i < n));
+        }
+
+        function saveAuditRecord() {
+            if (currentStars === 0) return alert("Please provide a food quality rating before saving.");
+            localStorage.setItem('hane_workers', JSON.stringify(workers));
+            alert(`Evaluation recorded.`);
+            window.location.href = "index.html";
+        }
+
+        initPage();
+    </script>
+</body>
+</html>
