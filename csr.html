@@ -3,144 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSR Report - Hane Board</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <title>CSR Report - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="dashboard-container csr-container">
-        <header style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; border-bottom: 2px solid var(--border-color); padding-bottom: 1rem;">
-            <div>
-                <div class="text-muted" style="letter-spacing: 2px; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 5px;">Corporate Social Responsibility</div>
-                <h1 style="font-size: 2.5rem; line-height: 1;">Social Impact & Capacity Building</h1>
-            </div>
-            <div style="text-align: right;">
-                <div id="date-display" class="text-muted" style="font-weight: 700; margin-bottom: 10px;"></div>
-                <button class="btn-primary" onclick="window.location.href='index.html'">← Return to Directory</button>
-            </div>
+    <div class="csr-container">
+        <header class="page-header right-align">
+            <button class="btn-primary" onclick="window.location.href='index.html'">← Back to Dashboard</button>
         </header>
 
-        <div class="executive-summary">
-            <strong>Executive Summary:</strong> Hane Board is committed to driving sustainable community growth through targeted skills training, human capital investment, and circular economy practices. This report outlines our year-to-date progress against our 2026 philanthropic benchmarks.
-        </div>
+        <main class="csr-stats-grid">
+            <section class="esg-pillar-card brown-border">
+                <div class="pillar-header brown-text">Social Inclusion Density</div>
+                <p class="text-muted mb-1">Evaluating the business as a social platform for human connection.</p>
 
-        <div class="csr-kpi-grid">
-            <div class="kpi-card">
-                <div class="kpi-header"><span class="kpi-title">Volunteer Mentorship</span><span class="kpi-icon">⏱️</span></div>
-                <div class="kpi-value" id="volunteer-hours">124</div>
-                <div class="kpi-subtitle">Total logged hours (YTD)</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-header"><span class="kpi-title">Circular Economy Yield</span><span class="kpi-icon">🌱</span></div>
-                <div class="kpi-value" style="color: #6B9C7A;">$2,450</div>
-                <div class="kpi-subtitle">Funds generated via compost recycling</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-header"><span class="kpi-title">Human Capital Index</span><span class="kpi-icon">📈</span></div>
-                <div class="kpi-value" style="color: #8A6130;" id="adv-pct-big">0%</div>
-                <div class="kpi-subtitle">Workforce operating at 'Skilled' or 'Expert'</div>
-            </div>
-        </div>
-
-        <div class="csr-content-grid">
-            
-            <div class="kpi-card">
-                <div class="kpi-header" style="margin-bottom: 1.5rem;">
-                    <span class="kpi-title" style="font-size: 1rem;">Community Capacity Growth (Mentorship Hours)</span>
+                <div class="canvas-wrapper">
+                    <canvas id="inclusionChart"></canvas>
                 </div>
-                <div style="height: 300px; width: 100%; position: relative;">
-                    <canvas id="impactChart"></canvas>
-                </div>
-            </div>
 
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div class="chart-container">
+                    <div id="inclusion-rate-val" class="metric-large-value brown-text">0%</div>
+                    <div class="sub-stat-row">
+                        <span class="sub-stat-label">Interaction Hours:</span>
+                        <span id="interaction-val" class="sub-stat-value">0 h</span>
+                    </div>
+                    <div class="sub-stat-row">
+                        <span class="sub-stat-label">Total Ops Hours:</span>
+                        <span id="ops-val" class="sub-stat-value">0 h</span>
+                    </div>
+                </div>
                 
-                <div class="kpi-card">
-                    <span class="kpi-title" style="margin-bottom: 1rem;">Workplace Equity Metrics</span>
-                    <div class="progress-list">
-                        <div class="progress-item">
-                            <div class="progress-label"><span>Career Advancement Rate</span> <span id="adv-pct">0%</span></div>
-                            <div class="progress-bar-bg"><div id="adv-fill" class="progress-bar-fill" style="width: 0%; background-color: #D2AA43;"></div></div>
-                        </div>
-                        <div class="progress-item">
-                            <div class="progress-label"><span>Reported Work-Life Balance</span> <span>92%</span></div>
-                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 92%; background-color: #6B9C7A;"></div></div>
-                        </div>
-                        <div class="progress-item">
-                            <div class="progress-label"><span>Community Inclusion Index</span> <span>88%</span></div>
-                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 88%; background-color: #E0957B;"></div></div>
-                        </div>
+                <p class="metric-footer-text">Ratio of public engagement time to mechanical prep time. High density indicates successful social visibility.</p>
+            </section>
+
+            <section class="esg-pillar-card green-border">
+                <div class="pillar-header green-text">Ergonomic Adaptation Utility</div>
+                <p class="text-muted mb-1">Proving technical adaptations allow PWD trainees to exceed benchmarks.</p>
+
+                <div class="canvas-wrapper">
+                    <canvas id="ergonomicChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <div id="ua-val" class="metric-large-value green-text">0%</div>
+                    <div class="sub-stat-row">
+                        <span class="sub-stat-label">Traditional Error:</span>
+                        <span id="base-frict-val" class="sub-stat-value">0%</span>
+                    </div>
+                    <div class="sub-stat-row">
+                        <span class="sub-stat-label">Adapted Error:</span>
+                        <span id="adapt-frict-val" class="sub-stat-value green-text">0%</span>
                     </div>
                 </div>
 
-                <div class="kpi-card" style="background-color: #E5D5B7; border: none;">
-                    <span class="kpi-title" style="color: #8A6130; margin-bottom: 1rem;">Q4 Strategic Directives</span>
-                    <ul style="padding-left: 1rem; font-size: 0.9rem; color: #5C5245; line-height: 1.6; font-weight: 600;">
-                        <li style="margin-bottom: 10px;">Transition 85% of active trainees to 'Expert' status.</li>
-                        <li style="margin-bottom: 10px;">Implement zero-waste recycling modules for new hires.</li>
-                        <li>Expand local youth outreach program capacity by 15%.</li>
-                    </ul>
+                <p class="metric-footer-text">This utility proves that Puzzle-based UI significantly reduces cognitive load and operational friction.</p>
+            </section>
+
+            <section class="esg-pillar-card gold-border">
+                <div class="pillar-header gold-text">Advancement Velocity</div>
+                <p class="text-muted mb-1">Showing stakeholders the speed of workforce development.</p>
+
+                <div class="canvas-wrapper">
+                    <canvas id="velocityChart"></canvas>
                 </div>
 
-            </div>
-        </div>
+                <div class="chart-container">
+                    <div id="velocity-val" class="metric-large-value gold-text">0.0</div>
+                    <div class="sub-stat-row">
+                        <span class="sub-stat-label">Total Level Jumps (ΔL):</span>
+                        <span id="delta-l-val" class="sub-stat-value">0</span>
+                    </div>
+                    <div class="sub-stat-row">
+                        <span class="sub-stat-label">Reporting Period (Δt):</span>
+                        <span class="sub-stat-value">30 Days</span>
+                    </div>
+                </div>
+
+                <p class="metric-footer-text">The velocity at which trainees jump proficiency levels. Correlates with the distribution of workforce skill levels.</p>
+            </section>
+        </main>
     </div>
 
-    <script>
-        // 1. Date formatting
-        const today = new Date();
-        document.getElementById('date-display').innerText = `AS OF: ${today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).toUpperCase()}`;
-
-        // 2. Data Logic
-        const workers = JSON.parse(localStorage.getItem('hane_workers')) || [];
-        
-        // Calculate Advancement Rate
-        const advancedCount = workers.filter(w => w.status === 'Skilled' || w.status === 'Expert').length;
-        const advPct = workers.length ? Math.round((advancedCount / workers.length) * 100) : 0;
-        
-        document.getElementById('adv-pct-big').innerText = `${advPct}%`;
-        document.getElementById('adv-pct').innerText = `${advPct}%`;
-        document.getElementById('adv-fill').style.width = `${advPct}%`;
-
-        // 3. Render Chart
-        const ctx = document.getElementById('impactChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May'],
-                datasets: [{
-                    label: 'Mentorship Hours',
-                    data: [18, 35, 62, 95, 124],
-                    borderColor: '#8A6130',
-                    backgroundColor: 'rgba(138, 97, 48, 0.08)',
-                    fill: true,
-                    tension: 0.3,
-                    borderWidth: 3,
-                    pointBackgroundColor: '#8A6130',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { 
-                        beginAtZero: true,
-                        grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false } 
-                    },
-                    x: { grid: { display: false, drawBorder: false } }
-                }
-            }
-        });
-    </script>
+    <script src="csr.js"></script>
 </body>
 </html>

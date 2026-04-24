@@ -8,18 +8,14 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <div>
-                <h1 style="margin-bottom: 0;">Hane Dashboard</h1>
-                <div class="text-muted" style="letter-spacing: 2px;">PUZZLE-BASED TASK DISPATCH & TRAINING SYSTEM</div>
+        <header class="page-header">
+            <div class="title-group">
+                <h1 class="mb-0">Hane Dashboard</h1>
+                <div class="text-muted subtitle-text">PUZZLE-BASED TASK DISPATCH & TRAINING SYSTEM</div>
             </div>
-            
-            <div style="display: flex; gap: 12px;">
+            <div class="header-actions">
                 <button class="btn-primary" onclick="openModal()">+ Add Worker</button>
-                
-                <button class="btn-primary" style="background-color: #6B9C7A;" onclick="window.location.href='esg.html'">ESG data</button>
-                
-                <button class="btn-primary" style="background-color: #4A90E2;" onclick="window.location.href='csr.html'">CSR data</button>
+                <button class="btn-primary btn-secondary" onclick="window.location.href='csr.html'">CSR Data</button>
             </div>
         </header>
 
@@ -28,68 +24,15 @@
 
     <div id="add-worker-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2 style="margin-bottom: 1rem; font-family: 'Quicksand';">Add New Trainee</h2>
+            <h2 class="modal-title">Add New Trainee</h2>
             <input type="text" id="new-name" class="modal-input" placeholder="Worker Name">
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-primary" style="background: #888; flex: 1;" onclick="closeModal()">Cancel</button>
-                <button class="btn-primary" style="flex: 2;" onclick="submitNewWorker()">Create Record</button>
+            <div class="modal-actions">
+                <button class="btn-primary btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary btn-confirm" onclick="submitNewWorker()">Create Record</button>
             </div>
         </div>
     </div>
 
-    <script>
-        const statusMap = {
-            "Learning":   { lvl: 1, class: "status-lvl-1" },
-            "Practicing": { lvl: 2, class: "status-lvl-2" },
-            "Skilled":    { lvl: 3, class: "status-lvl-3" },
-            "Expert":     { lvl: 4, class: "status-lvl-4" }
-        };
-
-        const legacyMap = { "Needs Support": "Learning", "Improving": "Practicing", "Consistent": "Skilled", "Ready": "Expert" };
-
-        let workers = JSON.parse(localStorage.getItem('hane_workers')) || [
-            { id: 1, name: "Odri", currentTask: "Espresso Extraction", status: "Practicing" },
-            { id: 2, name: "Bervin", currentTask: "Order Dispatch", status: "Expert" },
-            { id: 3, name: "Wen xuan", currentTask: "Cup Preparation", status: "Learning" },
-            { id: 4, name: "Yu", currentTask: "Milk Steaming", status: "Skilled" }
-        ];
-
-        function formatName(n) { return n.charAt(0).toUpperCase() + n.slice(1).toLowerCase(); }
-
-        function renderList() {
-            const container = document.getElementById('worker-list-container');
-            container.innerHTML = '';
-            workers = workers.map(w => { if(legacyMap[w.status]) w.status = legacyMap[w.status]; return w; });
-            
-            workers.forEach(w => {
-                const s = statusMap[w.status] || statusMap["Learning"];
-                const card = document.createElement('div');
-                card.className = 'worker-card';
-                card.onclick = () => window.location.href = `worker.html?id=${w.id}`;
-                card.innerHTML = `
-                    <div class="avatar"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-                    <div class="worker-card-content">
-                        <div class="worker-name">${formatName(w.name)}</div>
-                        <div class="worker-meta"><span>Task: ${w.currentTask}</span><span>Level: ${s.lvl}</span></div>
-                    </div>
-                    <div class="status-tag ${s.class}">${w.status}</div>`;
-                container.appendChild(card);
-            });
-            localStorage.setItem('hane_workers', JSON.stringify(workers));
-        }
-
-        function openModal() { document.getElementById('add-worker-modal').classList.add('show'); }
-        function closeModal() { document.getElementById('add-worker-modal').classList.remove('show'); document.getElementById('new-name').value = ''; }
-        
-        function submitNewWorker() {
-            const name = document.getElementById('new-name').value.trim();
-            if (!name) return alert("Enter a name");
-            workers.push({ id: Date.now(), name: name, currentTask: "Orientation", status: "Learning" });
-            renderList(); 
-            closeModal();
-        }
-
-        renderList();
-    </script>
+    <script src="index.js"></script>
 </body>
 </html>
